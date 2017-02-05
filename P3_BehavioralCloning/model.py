@@ -76,9 +76,9 @@ except:
 
 # Train the model
 history = model.fit_generator(generate_batch(data_train, batch_size=128), 
-											 len(data_train), nb_epoch=1, 
-											 validation_data=generate_batch(data_validation, batch_size=128),
-											 nb_val_samples=len(data_validation))
+				 len(data_train), nb_epoch=1, 
+				 validation_data=generate_batch(data_validation, batch_size=128),
+				 nb_val_samples=len(data_validation))
 
 # Save the model and weights
 model.save_weights('model.h5')
