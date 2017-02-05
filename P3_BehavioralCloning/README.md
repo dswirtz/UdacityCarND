@@ -1,33 +1,23 @@
 #Udacity Self-Driving Car Nanodegree - Behavioral Cloning
 
-***
-
 #####Douglas Wirtz
 #####February 2nd, 2017
 
 ##Background
 
-***
-
 Behavioral cloning is an act of learning through imitation whose main purpose is to build a model of human behavior. In this project, behavioral cloning is applied to mimic the complex skill of driving a car. In order to achieve this task, first, data is collected via a simulator. As a human drives the car around the track, the simulator records the images of three camera angles (left, right, and center) and the steering angle at the time each image was taken. The simulator creates a labeled dataset of inputs (images) and outputs (steering angles) needed to train a convolutional neural network. After the network is trained, the model is then applied to the simulator, autonomously driving a car around the track.  
 
 ##Approach
 
-***
-
 The inspiration for my approach largely came from a paper Nvidia wrote about [End-to-End Deep Learning for Self-Driving Cars](https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/) and [keras documentation](https://keras.io/). I wanted to develop a solution that was as close to a real scenario as possible. What I mean by that is I only collected data from cleaning driving. Then through multiple camera angles, image transformations, and image processing, I created the synthetic data needed to simulate recovery driving.
 
 ##Network Architecture
-
-***
 
 Inspiration for this network architecture originated from the Nvidia End-to-End Deep Learning paper. This network starts with inputting a 64x64x1 image into a convolutional layer comprised of 24-5x5 filters. That is followed by a batch normalization layer which normalizes the activations of the previous layer by maintaining the mean activation close to 0 and the activation standard deviation close to 1. That layer is followed by 3 more convolutional layers with filters of 36, 48, and 64 respectively. The kernal size of those layers are 5x5, 3x3, and 3x3 respectively. Each of those convolutional layers is followed by a max pooling layer with 2x2 filters. Max pooling will help against over-fitting the data as well as reducing the parameters and computational cost. Then the model gets flattened, followed by 4 fully connected layers with 1164, 100, 50, and 10 neurons respectively with L2 regularization. The L2 regularization applies penalties to the weight parameters during optimization. Inserted in the middle of the fully connected layers are dropout layers with a keep probability of 50%. Implementing dropout layers forces the model to develop redundancies as well as helping against over-fitting the data. Finally, the model outputs a steering angle. ReLU activations were used for this model to introduce non-linearity to my model. The model was compiled using the Adam Optimizer measuring the mean squared error ('mse') as the loss.
 
 ![**Figure No. 1: Network Architecture**](Figures/NetArch.PNG)
 
 ##Training
-
-***
 
 The data used in training was obtained by driving two clean laps in the simulator using a joystick. I drove the car at ~20 mph. I didn't collect any recovery data becuase it was my intention to truthful to a real scenario. I developed recovery data through image processing and other camera angles. Every frame records 3 images: left, center, and right. 
 
