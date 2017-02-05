@@ -66,6 +66,6 @@ This model was initally trained with a learning rate of 0.0001 and a batch size 
 
 As the model is being tested on the simulator, the center image in every frame is processed using the 4 techniques under "General Image Processing" to predict the steering angle.
 
-![**Figure No. 3: Model Test**](Figures/Track_1.gif)
+![**Figure No. 3: Model Test**](Figures/Track_1.GIF)
 
 ***
