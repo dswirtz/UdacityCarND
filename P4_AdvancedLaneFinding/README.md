@@ -32,5 +32,32 @@ Here I imported all the dependencies and funtions I used to complete this projec
 
 The absolute first step in this project must be camera calibration. This will allow you to correct for image distortion and accurately process each image to be representative of real world distances. 
 
-In order to do this, I filled a list of object points, `objpoints = []`, which are 3D points in a real world space, and a list of image points, `imgpoints = []`, which are the corresponding 2D points in an image. I filled the lists using a combination of the set of 9x6-corner chessboard calibration images in the `/camera_cal` folder and the `cv2.findChessboardCorners()` function. If the corners were found in the image, the real world object points and corresponding image points were appending to their respective lists.
+In order to do this, I filled a list of object points, `objpoints = []`, which are 3D points in a real world space, and a list of image points, `imgpoints = []`, which are the corresponding 2D points in an image. I filled the lists using a combination of the set of 9x6-corner chessboard calibration images in the `/camera_cal` folder and the `cv2.findChessboardCorners()` function. If the corners were found in the image, the real world object points and corresponding image points were appended to their respective lists. While looping through the images, finding the chessboard corners, I used the `cv2.drawChessboardCorners()` function to draw the corners on the chessboard images. Here is an example:
+
+![image](img)
+
+Finally, I used the `cv2.calibrateCamera()` function in conjunction with `objpoints` and `imgpoints` to compute the calibration matrix, `mtx`, and the distortion coefficients, `dist`.
+
+###3. Apply a distortion correction to raw images
+
+Along with `mtx` and `dist` from the previous section, I used `cv2.undistort()` to undistort images. Once an image is corrected for distortion, it can then proceed to the meat of image processing. Below is an example of an undistorted calibration image as well as an example of a test image from the `/test_images` folder.
+
+![image](img)
+
+![image](img)
+
+###4. Use color transforms, gradients, etc., to create a thresholded binary image
+
+###5. Apply a perspective transform to rectify binary image ("birds-eye view")
+
+###6. Detect lane pixels and fit to find the lane boundary
+
+###7. Determine the curvature of the lane and vehicle position with respect to center
+
+###8. Warp the detected lane boundaries back onto the original image
+
+###9. Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position
+
+###10. Run pipeline on a video
+
 ***
