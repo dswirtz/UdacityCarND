@@ -17,7 +17,7 @@ I decided on a basic step-wise approach for this project, completing each task b
 2. Compute the camera calibration matrix and distortion coefficients given a set of chessboard images
 3. Apply a distortion correction to raw images
 4. Use color transforms, gradients, etc., to create a thresholded binary image
-5. Apply a perspective transform to rectify binary image ("birds-eye view")
+5. Apply a perspective transform to rectify a binary image ("birds-eye view")
 6. Detect lane pixels and fit to find the lane boundary
 7. Determine the curvature of the lane and vehicle position with respect to center
 8. Warp the detected lane boundaries back onto the original image
@@ -52,14 +52,23 @@ This is where a lot of the magic happens. Performing various transformations and
 
 * **Undistortion:** Refer to steps 2-3 of this document for details on undistorting an image.
 * **Gaussian Blur:** A Guassian blur transformation will reduce the noise in an image by averaging pixels, making the image more blurry. The idea behind this is to reduce the amount of unecessary features in the final transformation. To perform this, I used the undistorted image as an input to the `cv2.GaussianBlur()` function with a kernal size of 5.
-* **Yellow and White Color Filter:**
+* **Yellow and White Color Filter:** As I was experimenting my pipeline, it performed fairly well on the video with the exception of transitioning to and from shaded areas. When the video approached those points, the performance dropped. Adding this color filter to the combined binary image significantly increased the performance in those areas.
 * **Applying the Sobel Operator:** The Sobel operator is similar to the `cv2.Canny()` function but allows us to apply edge detection to either the x or y direction (or both at the same time). Because we know that the lane line are close to vertical, we will apply the Sobel operator to the undistorted image in the x direction, creating a binary output. This is done using `cv2.Sobel()`.
 * **Magnitude of the Gradient:** With the result of a Sobel transformation, you can compute the magnitude of the gradient by setting thresholds to identify pixels within a certain gradient range. This transformation will allow the x-gradient to do a better job of picking up the vetical lane lines. The output from this is another binary image.
 * **Direction of the Gradient:** Gradient direction is a big part of why `cv2.Canny()` edge is so great at picking up all edges in an image. With a result from a Sobel transformation, you can compute the direction of the gradient by setting a direction threshold. The direction of the gradient is computed by `arctan(sobely/sobelx)` and a binary output is created by setting pixels within the threshold to 1 while the other pixels to 0.
 * **HLS Color Space:** When changing the undistorted image to grayscale, you lose some valuable color information, especially when changes in lighting occurs. Changing the HLS color space also helps when it becomes difficult to detect an edge (i.e. a yellow lane line in the bright sunlight). It turns out that the S_channel in the HLS color space is one of the most robust color spaces to use in a binary color filter. To create this binary filter, I converted the undistorted image to the HLS color space using `cv2.COLOR_RGB2HLS()` and then selected the S_channel by `s_channel = hls[:,:,2]`.
-* **Combined Thresholded Binary Images:**
+* **Combined Thresholded Binary Images:** After all the binary filters were created, aspects from each one were combined into a final binary image. The idea behind creating all of these filters is to develop a robust binary output, so that differences in lighting, time of day, and weather patterns will have less of an impact on the final combined binary output.
+* **Apply a Crop Mask:** Since the camera is fixed on the center of the car, it's safe to assume a consistent area of interest when searching for lane lines. Using 4 defined points on the image, `cv2.fillPoly()`, and `cv2.bitwise_and()`, I applied a mask that removed almost everything from the surrounding lane lines. This will especially help in step 6 when I detect for lane pixels in the warped binary image. In particular, this helped me remove the variable of the passing car in the project video. One of my first implementations periodically picked up the passing car and thought it was a lane line.
 
-###5. Apply a perspective transform to rectify binary image ("birds-eye view")
+Below you can see each step performed using an image from the `/test_images` folder.
+
+![image](img)
+
+###5. Apply a perspective transform to rectify a binary image ("birds-eye view")
+
+Using the final masked binary image, I chose 4 source (`src`) points in a trapezoidal fashion followed by 4 destination (`dst`) points that has the shape of a rectangle. I warped those points, interpolated linearly, using the functions `cv2.getPerspectiveTransform` and `cv2.warpPerspective`. Continuing with the example in the previous step, below is a picture of the combined masked binary being warped into a 'birds-eye view' of the road.
+
+![image](img)
 
 ###6. Detect lane pixels and fit to find the lane boundary
 
@@ -70,5 +79,7 @@ This is where a lot of the magic happens. Performing various transformations and
 ###9. Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position
 
 ###10. Run pipeline on a video
+
+###Discussion
 
 ***
