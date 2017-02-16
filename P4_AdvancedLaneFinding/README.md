@@ -48,6 +48,17 @@ Along with `mtx` and `dist` from the previous section, I used `cv2.undistort()` 
 
 ###4. Use color transforms, gradients, etc., to create a thresholded binary image
 
+This is where a lot of the magic happens. Performing various transformations and gradient thresholdings on an undistorted image to create a binary image is what allows us to see only what we want to see. Below is a list of the transformations done on every image, how each one was computed, and why it is necessary for each transformation.
+
+* **Undistortion:** Refer to steps 2-3 of this document for details on undistorting an image.
+* **Gaussian Blur:** A Guassian blur transformation will reduce the noise in an image by averaging pixels, making the image more blurry. The idea behind this is to reduce the amount of unecessary features in the final transformation. To perform this, I used the undistorted image as an input to the `cv2.GaussianBlur()` function with a kernal size of 5.
+* **Yellow and White Color Filter:**
+* **Applying the Sobel Operator:** The Sobel operator is similar to the `cv2.Canny()` function but allows us to apply edge detection to either the x or y direction (or both at the same time). Because we know that the lane line are close to vertical, we will apply the Sobel operator to the undistorted image in the x direction, creating a binary output. This is done using `cv2.Sobel()`.
+* **Magnitude of the Gradient:** With the result of a Sobel transformation, you can compute the magnitude of the gradient by setting thresholds to identify pixels within a certain gradient range. This transformation will allow the x-gradient to do a better job of picking up the vetical lane lines. The output from this is another binary image.
+* **Direction of the Gradient:** Gradient direction is a big part of why `cv2.Canny()` edge is so great at picking up all edges in an image. With a result from a Sobel transformation, you can compute the direction of the gradient by setting a direction threshold. The direction of the gradient is computed by `arctan(sobely/sobelx)` and a binary output is created by setting pixels within the threshold to 1 while the other pixels to 0.
+* **HLS Color Space:** When changing the undistorted image to grayscale, you lose some valuable color information, especially when changes in lighting occurs. Changing the HLS color space also helps when it becomes difficult to detect an edge (i.e. a yellow lane line in the bright sunlight). It turns out that the S_channel in the HLS color space is one of the most robust color spaces to use in a binary color filter. To create this binary filter, I converted the undistorted image to the HLS color space using `cv2.COLOR_RGB2HLS()` and then selected the S_channel by `s_channel = hls[:,:,2]`.
+* **Combined Thresholded Binary Images:**
+
 ###5. Apply a perspective transform to rectify binary image ("birds-eye view")
 
 ###6. Detect lane pixels and fit to find the lane boundary
