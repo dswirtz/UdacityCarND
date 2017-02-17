@@ -21,8 +21,8 @@ I decided on a basic step-wise approach for this project, completing each task b
 6. Detect lane pixels and fit to find the lane boundary
 7. Determine the curvature of the lane and vehicle position with respect to center
 8. Warp the detected lane boundaries back onto the original image
-9. Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position
-10. Run pipeline on a video
+9. Output visual display of the lane boundaries, numerical estimation of lane curvature, and vehicle position
+10. Run pipeline on project video
 
 ###1. Import dependencies and functions
 
@@ -76,10 +76,21 @@ Using the final masked binary image, I chose 4 source (`src`) points in a trapez
 
 ###8. Warp the detected lane boundaries back onto the original image
 
-###9. Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position
+###9. Output visual display of the lane boundaries, numerical estimation of lane curvature, and vehicle position
 
-###10. Run pipeline on a video
+Here I ran every image in the `/test_image` folder through my pipeline to display the lane boundaries, numerical estimation of the lane curvature, and vehicle position. All of these images below can be found in the `/output_images` folder.
+
+###10. Run pipeline on project video
+
+Completing this project in steps allowed me to build a very straight-forward pipeline. Please direct yourself to the video in this repository entitled "new_project_video". Using `moviepy.editor`, I ran every frame of this video through my pipeline software to detect the lane line boundaries on a road.
 
 ###Discussion
 
+On the first couple of implementations of my pipeline, I remember two distinct problems I faced. The first of which was an issue occuring when the car enter/leaves shadowed areas. The lane detection worked fairly well up to those points, and then, in my opinion, failed miserably. The detection would become very wobbly and flicker in and out. After some research and adjustment of some thresholds, I implemented a yellow/white color filter to the binary output. This allows the pipeline adjust better to those sudden changes in lighting. 
+
+The second problem I remember having was the passing car on the right. As the car was passing, my early implementation picked up the car as a lane line, essentially making my lane twice as big. To fix this issue, I implemented an area-of-interest mask to my binary output that zeroed all pixels outside of the area. This issue was immediately resolved in my next implementation. I did make other changes since this addition, so it's possible I might have been able to solve this problem using other means.
+
+My final implementation works fairly well, but there is always a way to make it more robust. In a future implementation, I would like to work on making the right lane (or dashed lane lines in general) perform better. Another improvement I would like to make is make the curvature of each lane line more consistent with its counterpart.
+
+This current implementation/pipeline will likely fail on dirt roads, or on roads with harsh conditions (i.e. weather or anything that would make it difficult to see the lane lines). Another thing to consider is that this pipeline was run on a video of a well-kept highway. Over time, road integrity will diminish. If the road integrity diminishes to a point where we couldn't see the line, this implementation will likely fail. So to add to the future goals of this pipeline, I would implement an algorithm, maybe even a deep neural network, to predict what the lane line would look like given a very little amount of information.
 ***
