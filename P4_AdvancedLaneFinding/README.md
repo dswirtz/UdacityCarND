@@ -74,6 +74,8 @@ Using the final masked binary image, I chose 4 source (`src`) points in a trapez
 
 ###7. Determine the curvature of the lane and vehicle position with respect to center
 
+My functions to determine the curvature of the lane (`find_curvature()`) and vehicle postion (`find_car_pos()`) are embedded in my function to fit the lane lines (`fit_line()`) because I had use components of the function that I didn't want to carry forward in my pipeline. The components, `leftx`, `rightx`, and `ploty` needed to be adjusted to real world space by multiplying the components by the meters/pixel ratio in both the x and y dimension. The x dimension is 3.7 meters for every 700 pixels, and the y dimension is 30 meters for every 720 pixels. Instead of carrying the components forward, I computed them inside the `fit_line()` function and carried the results forward. In the final step of the pipeline, I used `cv2.putText()` to paste the curvatures of the left and right lane lines as well as the vehicle position relative to center on the final image. In reference to vehicle posistion, the center of the lane is equal to 0. Negative values mean that the vehicle is left of center whereas positive values mean that the vehicle is right of center.
+
 ###8. Warp the detected lane boundaries back onto the original image
 
 Now that I've determined the polynomial fit for both the left and right lane lines, I used `cv2.follPoly()` to change all points between the left and right lines green. Using `cv2.warpPerspective()` and the inverse warp matrix from step 5 (`Minv`), I warped the polyfill mask back to the original dimensions. Finally, using `cv2.addWeighted()`, I applied the new warped mask to the undistorted image to create the final product seen below.
