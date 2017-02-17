@@ -66,7 +66,7 @@ Below you can see each step performed using an image from the `/test_images` fol
 
 ###5. Apply a perspective transform to rectify a binary image ("birds-eye view")
 
-Using the final masked binary image, I chose 4 source (`src`) points in a trapezoidal fashion followed by 4 destination (`dst`) points that has the shape of a rectangle. I warped those points, interpolated linearly, using the functions `cv2.getPerspectiveTransform` and `cv2.warpPerspective`. Continuing with the example in the previous step, below is a picture of the combined masked binary being warped into a 'birds-eye view' of the road.
+Using the final masked binary image, I chose 4 source (`src`) points in a trapezoidal fashion followed by 4 destination (`dst`) points that has the shape of a rectangle. I warped those points, interpolated linearly, using the functions `cv2.getPerspectiveTransform` and `cv2.warpPerspective`. Two very important variables are computed from this step. The first is the warp matrix (`M`) which is used to convert the image to the warped, 'birds-eye view'. The second is the inverse warp matrix (`Minv`) which will not be used in this step because it is used to convert the warped, polyfill mask back to the original dimensions. Continuing with the example in the previous step, below is a picture of the combined masked binary being warped into a 'birds-eye view' of the road.
 
 ![image](img)
 
@@ -76,9 +76,15 @@ Using the final masked binary image, I chose 4 source (`src`) points in a trapez
 
 ###8. Warp the detected lane boundaries back onto the original image
 
+Now that I've determined the polynomial fit for both the left and right lane lines, I used `cv2.follPoly()` to change all points between the left and right lines green. Using `cv2.warpPerspective()` and the inverse warp matrix from step 5 (`Minv`), I warped the polyfill mask back to the original dimensions. Finally, using `cv2.addWeighted()`, I applied the new warped mask to the undistorted image to create the final product seen below.
+
+![image](img)
+
 ###9. Output visual display of the lane boundaries, numerical estimation of lane curvature, and vehicle position
 
 Here I ran every image in the `/test_image` folder through my pipeline to display the lane boundaries, numerical estimation of the lane curvature, and vehicle position. All of these images below can be found in the `/output_images` folder.
+
+![image](img)
 
 ###10. Run pipeline on project video
 
