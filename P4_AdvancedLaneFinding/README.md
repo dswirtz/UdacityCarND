@@ -9,7 +9,7 @@ Computer vision is the science of gaining a high-level understanding of the worl
 
 ##Approach
 
-I decided on a basic step-wise approach for this project, completing each task by building on the previous ones. Outlined below are the series of steps I took to complete this project. To view a more in-depth detail of the code used, the steps are clearly numbered in the [P4_AdvancedLaneFinding markdown file](P4_AdvancedLaneFinding.md). 
+I decided on a basic step-wise approach for this project, completing each task by building on the previous ones. Outlined below are the series of steps I took to complete this project. To view a more in-depth detail of the code used, the steps are clearly numbered in the [P4_AdvancedLaneFinding markdown file](./P4_AdvancedLaneFinding.md). 
 
 **Advanced Lane Finding Project**
 
