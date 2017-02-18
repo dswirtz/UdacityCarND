@@ -416,7 +416,7 @@ plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
 ```
 
 
-![png](output_6_0.png)
+![png](Figures/step3a.PNG)
 
 
 
@@ -437,7 +437,7 @@ plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
 ```
 
 
-![png](output_7_0.png)
+![png](Figures/step3b.PNG)
 
 
 ### 4. Use color transforms, gradients, etc., to create a thresholded binary image
@@ -496,7 +496,10 @@ plt.subplots_adjust(left=0., right=1, top=2.0, bottom=0.)
 ```
 
 
-![png](output_9_0.png)
+![png](Figures/step4a.PNG)
+
+![png](Figures/step4b.PNG)
+
 
 
 ### 5. Apply a perspective transform to rectify a binary image ("birds-eye view")
@@ -520,7 +523,7 @@ plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
 ```
 
 
-![png](output_11_0.png)
+![png](Figures/step5.PNG)
 
 
 ### 6. Detect lane pixels and fit to find the lane boundary
@@ -557,7 +560,7 @@ plt.ylim(720, 0)
 
 
 
-![png](output_13_2.png)
+![png](Figures/step6.PNG)
 
 
 ### 7. Determine the curvature of the lane and vehicle position with respect to center
@@ -612,7 +615,7 @@ plt.imshow(result)
 
 
 
-![png](output_17_1.png)
+![png](Figures/step8.PNG)
 
 
 ### 9. Output visual display of lane boundaries, numerical estimation of lane curvature, and vehicle position
@@ -637,7 +640,7 @@ for image in os.listdir('test_images/'):
     
 
 
-![png](output_19_1.png)
+![png](Figures/step9.PNG)
 
 
 ### 10. Run pipeline on project video
