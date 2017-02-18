@@ -393,7 +393,7 @@ plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
 ```
 
 
-![png](output_4_0.png)
+![png](Figures/step2.PNG)
 
 
 ### 3. Apply distortion correction to raw images
