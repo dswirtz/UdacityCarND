@@ -42,9 +42,9 @@ Finally, I used the `cv2.calibrateCamera()` function in conjunction with `objpoi
 
 Along with `mtx` and `dist` from the previous section, I used `cv2.undistort()` to undistort images. Once an image is corrected for distortion, it can then proceed to the meat of image processing. Below is an example of an undistorted calibration image as well as an example of a test image from the `/test_images` folder.
 
-![image](img)
+![](Figures/step3a.PNG)
 
-![image](img)
+![](Figures/step3b.PNG)
 
 ###4. Use color transforms, gradients, etc., to create a thresholded binary image
 
@@ -62,19 +62,21 @@ This is where a lot of the magic happens. Performing various transformations and
 
 Below you can see each step performed using an image from the `/test_images` folder.
 
-![image](img)
+![](Figures/step4a.PNG)
+
+![](Figures/step4b.PNG)
 
 ###5. Apply a perspective transform to rectify a binary image ("birds-eye view")
 
 Using the final masked binary image, I chose 4 source (`src`) points in a trapezoidal fashion followed by 4 destination (`dst`) points that has the shape of a rectangle. I warped those points, interpolated linearly, using the functions `cv2.getPerspectiveTransform` and `cv2.warpPerspective`. Two very important variables are computed from this step. The first is the warp matrix (`M`) which is used to convert the image to the warped, 'birds-eye view'. The second is the inverse warp matrix (`Minv`) which will not be used in this step because it is used to convert the warped, polyfill mask back to the original dimensions. Continuing with the example in the previous step, below is a picture of the combined masked binary being warped into a 'birds-eye view' of the road.
 
-![image](img)
+![](Figures/step5.PNG)
 
 ###6. Detect lane pixels and fit to find the lane boundary
 
 To detect the left and right lane lines, I took the bottom half the warped image in step 5, and summed up all of the y points for every x point. This is essentially a histogram showing the frequency of y values per x value. The left and right lane bases will be set to the highest peaks in the histogram because in a robust algorithm, those highest peaks will correspond to lane line pixels. From there, I set the number of search windows to 9, each with an equal height. I set the margin equal to 100, which sets the width of each window (peak base +/- margin). Lastly, I set the minimum threshold of amount of pixels required to recenter the window to 50 pixels. As the algorithm loops through each search window, it finds all indeces within in the specified range, and appends them to a list. If the window has more than the minimum of 50 nonzero pixels, the next window will be recentered on the mean of the current window. There is a check in place to see if the difference between the current window and the previous window is greater than 60 pixels. If it is greater, then the current window base is changed to the previous window. Once I concatenated the left and right indeces, I extracted the pixel positions and applied a polynomial fit using `np.polyfit()`. After obtaining the line fit, I generated points along the fit lines to plot a continuous line. Here is an example of a binary warped image with the left and right fit lines plotted. You can also see the 9 search windows outlined in green.
 
-![image](img)
+![](Figures/step6.PNG)
 
 When applying the pipeline to a video, in the first frame, I used the histogram and window search to find the lane lines. However, in a video, you can use the previous fit lines to find the lanes in the next frame. To do this, I implemented global variables to serve as on/off switches that allow the pipeline to use the window search on the first frame, but then uses the previous fit lines to find the next. This allows for smoother transitions from frame to frame.
 
@@ -88,13 +90,13 @@ For this test image example, the curvature of the left lane is 1203.32m and righ
 
 Now that I've determined the polynomial fit for both the left and right lane lines, I used `cv2.follPoly()` to change all points between the left and right lines green. Using `cv2.warpPerspective()` and the inverse warp matrix from step 5 (`Minv`), I warped the polyfill mask back to the original dimensions. Finally, using `cv2.addWeighted()`, I applied the new warped mask to the undistorted image to create the final product seen below.
 
-![image](img)
+![](Figures/step8.PNG)
 
 ###9. Output visual display of the lane boundaries, numerical estimation of lane curvature, and vehicle position
 
 Here I ran every image in the `/test_image` folder through my pipeline to display the lane boundaries, numerical estimation of the lane curvature, and vehicle position. All of these images below can be found in the `/output_images` folder.
 
-![image](img)
+![](Figures/step9.PNG)
 
 ###10. Run pipeline on project video
 
