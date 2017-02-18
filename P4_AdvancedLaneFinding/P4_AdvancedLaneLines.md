@@ -495,11 +495,9 @@ ax10.set_title('Combined Masked Binary', fontsize=75)
 plt.subplots_adjust(left=0., right=1, top=2.0, bottom=0.)
 ```
 
-
 ![png](Figures/step4a.PNG)
 
 ![png](Figures/step4b.PNG)
-
 
 
 ### 5. Apply a perspective transform to rectify a binary image ("birds-eye view")
@@ -521,8 +519,6 @@ ax2.imshow(warped, cmap='gray')
 ax2.set_title('Warped', fontsize=50)
 plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
 ```
-
-
 ![png](Figures/step5.PNG)
 
 
@@ -548,17 +544,6 @@ plt.plot(right_fitx, ploty, color='yellow')
 plt.xlim(0, 1280)
 plt.ylim(720, 0)
 ```
-
-    C:\Users\Doug\Anaconda3\lib\site-packages\ipykernel\__main__.py:135: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
-    
-
-
-
-
-    (720, 0)
-
-
-
 
 ![png](Figures/step6.PNG)
 
@@ -607,14 +592,6 @@ result = cv2.addWeighted(undist, 1, newwarp, 0.3, 0)
 plt.imshow(result)
 ```
 
-
-
-
-    <matplotlib.image.AxesImage at 0x21a13a40518>
-
-
-
-
 ![png](Figures/step8.PNG)
 
 
@@ -634,11 +611,7 @@ for image in os.listdir('test_images/'):
     plt.axis('off')
     plt.imsave('output_images/new_' + image, img)
     i += 1
-```
-
-    C:\Users\Doug\Anaconda3\lib\site-packages\ipykernel\__main__.py:135: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
-    
-
+```  
 
 ![png](Figures/step9.PNG)
 
