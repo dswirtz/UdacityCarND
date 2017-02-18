@@ -34,7 +34,7 @@ The absolute first step in this project must be camera calibration. This will al
 
 In order to do this, I filled a list of object points, `objpoints = []`, which are 3D points in a real world space, and a list of image points, `imgpoints = []`, which are the corresponding 2D points in an image. I filled the lists using a combination of the   9x6-corner chessboard calibration images in the `/camera_cal` folder and the `cv2.findChessboardCorners()` function. If the corners were found in the image, the real world object points and corresponding image points were appended to their respective lists. While looping through the images, finding the chessboard corners, I used the `cv2.drawChessboardCorners()` function to draw the corners on the chessboard images. Here is an example:
 
-![image](img)
+![](Figures/step2.PNG)
 
 Finally, I used the `cv2.calibrateCamera()` function in conjunction with `objpoints` and `imgpoints` to compute the calibration matrix, `mtx`, and the distortion coefficients, `dist`.
 
