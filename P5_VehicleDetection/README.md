@@ -64,7 +64,17 @@ spatial_feat = True # Spatial features on or off
 hist_feat = True # Histogram features on or off
 hog_feat = True # HOG features on or off
 ```
-
+Once I extracted the features, I vertically stacked the car and non-car feature vectors, scaled them using `StandardScaler().fit()`, assigned labels (1 == car and 0 == non-car), shuffled x and y using `shuffle()`, and split the training into a 20% testing set. From there I used a support vector classifier (SVC) to train the classifier and got the following results:
+```
+223.47 Seconds to extract image features...
+Using: 9 orientations 8 pixels per cell and 2 cells per block
+Feature vector length: 8460
+105.96 Seconds to train SVC...
+Test Accuracy of SVC =  0.9879
+My SVC predicts:  [ 0.  1.  0.  0.  0.  0.  1.  1.  1.  0.]
+For these 10 labels:  [ 0.  1.  0.  0.  0.  0.  1.  1.  1.  0.]
+0.02 Seconds to predict 10 labels with SVC
+```
 
 ###5. Apply classifier to predict vehicle detection in test images
 
