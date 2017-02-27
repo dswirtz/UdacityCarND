@@ -82,7 +82,9 @@ In order to apply the classifier to predict vehicle detection in the test images
 
 It's beneficial to set specific slide windows based on the scale is because of computing power and reduce false positives. The bigger the slide window region of interest, the longer it will take to process each image (or each frame in a video). So it's better to limit the large region of interest to the larger xy_window scale. On the other side of things, it can help to reduce the number of false positives. For example, imagine you're using a small scale xy_window in an area close to the hood of the car. That area is clearly meant for a larger scale xy_window. Using a small scale xy_window in that area can increase the risk of something on the ground being classified as a false positive, causing the car to potentially make a detrimental corrective action. So in short, adjust the region of interest appropiately based on the xy_window scale.
 
+For my implementation, I searched the windows at 3 different scales and drew boxes around the positively classified. From there I applied heat to the zones where boxes were; higher the heat, the more boxes that overlapped. Then using `apply_threshold()`, I applied a threshold of 1 which removes boxes that didn't have any overlap through the 3 different scales. These likely will identify as your false positives.
 
+After applying the thresholding, I labeled the heatmap using `label()` which identifies how many cars there are and drew the label boxes using `draw_labeled_bboxes()`. The draw function draws a rectangle using the min and max of the labels resulting in one clean box per identified car.
 
 ###6. Run classifier pipeline on project video
 
