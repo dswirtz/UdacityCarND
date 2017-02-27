@@ -86,6 +86,8 @@ For my implementation, I searched the windows at 3 different scales and drew box
 
 After applying the thresholding, I labeled the heatmap using `label()` which identifies how many cars there are and drew the label boxes using `draw_labeled_bboxes()`. The draw function draws a rectangle using the min and max of the labels resulting in one clean box per identified car.
 
+In efforts to save on computing time and reduce false positives, I restricted my biggest xy_window scale to an x_start_stop of everything right of the yellow line. My two subsequent smaller xy_window scales were stricted to an x_start_stop of everything right of the dashed line. With my current heatmap thresholding, this will reduce/eliminate false positives directly in front of the car due to things such as shadows, while still picking up positive results if a hypothetical car had been in front at an appropriate scale (i.e. close enough). My main concern was to reduce false positives directly in front or directly to the side of the car because those false positive results could have the greatest detrimental impact on a corrective action.
+
 ###6. Run classifier pipeline on project video
 
 ###Discussion
