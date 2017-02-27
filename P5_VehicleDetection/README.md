@@ -64,7 +64,7 @@ spatial_feat = True # Spatial features on or off
 hist_feat = True # Histogram features on or off
 hog_feat = True # HOG features on or off
 ```
-Once I extracted the features, I vertically stacked the car and non-car feature vectors, scaled them using `StandardScaler().fit()`, assigned labels (1 == car and 0 == non-car), shuffled x and y using `shuffle()`, and split the training into a 20% testing set. From there I used a support vector classifier (SVC) to train the classifier and got the following results:
+Once I extracted the features, I vertically stacked the car and non-car feature vectors, scaled them using `StandardScaler().fit()`, assigned labels (1 == car and 0 == non-car), shuffled x and y using `shuffle()`, and split the training into a 20% testing set using `train_test_split()`. From there I used a support vector classifier (SVC) to train the classifier and got the following results:
 ```
 223.47 Seconds to extract image features...
 Using: 9 orientations 8 pixels per cell and 2 cells per block
@@ -77,6 +77,12 @@ For these 10 labels:  [ 0.  1.  0.  0.  0.  0.  1.  1.  1.  0.]
 ```
 
 ###5. Apply classifier to predict vehicle detection in test images
+
+In order to apply the classifier to predict vehicle detection in the test images, you must define your slide windows and at what scale. because we don't want to predict cars in the sky, we can immediately focus our efforts to predict cars from the horizon (about middle of the image) to the hood of the car. When setting my y_start_stop variable, I took into account the scale at which I was running the slide window. As the scale gets smaller, the y_start_stop window will get narrower. The reason for this is the fact that cars will appear smaller as they get closer to the horizon. 
+
+It's beneficial to set specific slide windows based on the scale is because of computing power and reduce false positives. The bigger the slide window region of interest, the longer it will take to process each image (or each frame in a video). So it's better to limit the large region of interest to the larger xy_window scale. On the other side of things, it can help to reduce the number of false positives. For example, imagine you're using a small scale xy_window in an area close to the hood of the car. That area is clearly meant for a larger scale xy_window. Using a small scale xy_window in that area can increase the risk of something on the ground being classified as a false positive, causing the car to potentially make a detrimental corrective action. So in short, adjust the region of interest appropiately based on the xy_window scale.
+
+
 
 ###6. Run classifier pipeline on project video
 
