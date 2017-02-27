@@ -28,25 +28,25 @@ Here I imported all the dependencies and funtions I used to complete this projec
 
 To read in the datasets, I used the `glob` module to generate a list of file paths. Then with the defined function `read_images()`, I read in each image using `mpimg.imread()`. After the images were read in, I checked the number in each dataset and found that the number of cars and non-cars were relatively similar, so I didn't take any action to even them out. I then doubled the size of the datasets with my function `flip_append()`, which essentially loops through every image, flips it, and appends the original along with the flipped into a new list. The final action I took with the classification images was to fix the scaling of the images. Using `mpimg.imread()` reads in .PNG images scaled 0 to 1. I fixed this with my `fix_scale()` function which loops through all of the images in a list and multiplies each image by 255. Here is an example of a car and non-car image with its flipped counterpart.
 
-![img](image)
+![](Figures/Step2.PNG)
 
 ###3. Explore image features
 
 In this step, I used the original car and non-car examples from above and explored the different features. First up was exploring the color channel features. Using the function `clolor_hist()` with `vis_hist=True`, it took in an RGB images and created histograms of each color channel. In addition, the function returns a list of histogram features which can be visualize with a plot. With this visualization alone, you can tell images of cars have much more color differential when compared to an image of a non-car.
 
-![img](image)
+![](Figures/Step3a.PNG)
 
 Next up I looked at spatially binned features of an RGB version of the car and non-car example (`bin_spatial()`). Using a bin size of 32x32 and `cv2.resize().ravel()`, I created the feature vectors seen in the plots below. Here you can see a drastic difference between a car and non-car image.
 
-![img](image)
+![](Figures/Step3b.PNG)
 
 Finally, I explored the HOG features of the example images from above. Because the `hog()` function takes in either a single color channel or grayscale image, for the purpose of this visualization, I converted the image to grayscale. I chose an orientation of 9 because I didn't want to split the gradient information up too much (> the typical value of 12) or too little (< the typical value of 6). Because I was classifying on 64x64 images, I wanted to keep my pix_per_cell and cell_per_block evenly divisible. So for that, I chose a pix_per_cell of 8 and cell_per_block of 2. When I trained my classifier and ran predictions on the test images/video, I kept all of these HOG parameters the same with the only exception being the color space. I changed the color space from grayscale to an RGB color space. I chose the RGB color space because it was the color space in my first iteration, and it showed some really promising results. Instead of trying a different color space immediately, I decided to improve upon what I had already put in place. With the visualization below, you can tell that the non-car HOG visualization is largely empty becuase there wasn't much change from pixel to pixel whereas the car HOG visualization showed the opposite.
 
-![img](image)
+![](Figures/Step3c.PNG)
 
 If you want to use all the features when training your classifier, it's important that you concatenate all of the feature vectors and scale them appropiately so that one set of features doesn't have a bias over another. Once you concatenate the features, you can scale them using `StandardScaler().fit()`. Once you fit the concatenated feature vector, you transform it into a scaled feature vector. Below you can see the spatial, color, and HOG features extracted from the original car image. They have been concatenated and plotted along with the scaled or normalized feature vector.
 
-![img](image)
+![](Figures/Step3d.PNG)
 
 ###4. Train a classifier
 
@@ -88,9 +88,9 @@ After applying the thresholding, I labeled the heatmap using `label()` which ide
 
 In efforts to save on computing time and reduce false positives, I restricted my biggest xy_window scale to an x_start_stop of everything right of the yellow line. My two subsequent smaller xy_window scales were stricted to an x_start_stop of everything right of the dashed line. With my current heatmap thresholding, this will reduce/eliminate false positives directly in front of the car due to things such as shadows, while still picking up positive results if a hypothetical car had been in front at an appropriate scale (i.e. close enough). My main concern was to reduce false positives directly in front or directly to the side of the car because those false positive results could have the greatest detrimental impact on a corrective action.
 
-![img](image)
+![](Figures/Step5a.PNG)
 
-![img](image)
+![](Figures/Step5b.PNG)
 
 ###6. Run classifier pipeline on project video
 
