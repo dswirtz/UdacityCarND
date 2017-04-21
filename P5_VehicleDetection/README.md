@@ -1,13 +1,13 @@
-#Udacity Self-Driving Car Nanodegree - Vehicle Detection
+# Udacity Self-Driving Car Nanodegree - Vehicle Detection
 
-#####Douglas Wirtz
-#####February 27th, 2017
+##### Douglas Wirtz
+##### February 27th, 2017
 
-##Background
+## Background
 
 Computer vision is the science of gaining a high-level understanding of the world through digital images and videos. It can be used along with a well-trained classifier to develop a powerful approach to engineer a self-driving car. The test images and videos used for this project were obtained using a front-facing camera on a moving car. The [car](https://s3.amazonaws.com/udacity-sdc/Vehicle_Tracking/vehicles_smallset.zip) and [non-car](https://s3.amazonaws.com/udacity-sdc/Vehicle_Tracking/non-vehicles_smallset.zip) datasets used for training the classifier were provided by Udacity. The goal of this project is to use the car and non-car datasets to train a classifier to detect vehicles on a road. Then using various computer vision techniques and the trained model, I built a software pipeline to detect and track the vehicles in both single images and videos.
 
-##Approach
+## Approach
 
 Similar to P4_AdvancedLaneLines, I approached this project by breaking the image processing video pipeline into its components. This allowed me to explore/visualize the data, experiment with ideas, and tune a pipeline one step at a time. Outlined below are the series of steps I took to complete this project. To view a more in-depth detail of the code used, the steps are clearly numbered in **P5_VehicleDetection.ipynb**. 
 
@@ -20,17 +20,17 @@ Similar to P4_AdvancedLaneLines, I approached this project by breaking the image
 5. Apply classifier to predict vehicle detection in test images
 6. Run classifier pipeline on project video
 
-###1. Import dependencies and functions
+### 1. Import dependencies and functions
 
 Here I imported all the dependencies and funtions I used to complete this project. The idea here was to keep the IPython notebook organized by keeping the individual steps clean. This also proved to be beneficial because it allowed me to build the `pipeline()` funtion piece by piece. During experimentation, I built the function in the step it was used in, and I made changes as I saw fit. Once it was finalized, I moved it to the dependencies and functions code block.
 
-###2. Read in dataset images and process for visualization
+### 2. Read in dataset images and process for visualization
 
 To read in the datasets, I used the `glob` module to generate a list of file paths. Then with the defined function `read_images()`, I read in each image using `mpimg.imread()`. After the images were read in, I checked the number in each dataset and found that the number of cars and non-cars were relatively similar, so I didn't take any action to even them out. I then doubled the size of the datasets with my function `flip_append()`, which essentially loops through every image, flips it, and appends the original along with the flipped into a new list. The final action I took with the classification images was to fix the scaling of the images. Using `mpimg.imread()` reads in .PNG images scaled 0 to 1. I fixed this with my `fix_scale()` function which loops through all of the images in a list and multiplies each image by 255. Here is an example of a car and non-car image with its flipped counterpart.
 
 ![](Figures/Step2.PNG)
 
-###3. Explore image features
+### 3. Explore image features
 
 In this step, I used the original car and non-car examples from above and explored the different features. First up was exploring the color channel features. Using the function `clolor_hist()` with `vis_hist=True`, it took in an RGB images and created histograms of each color channel. In addition, the function returns a list of histogram features which can be visualize with a plot. With this visualization alone, you can tell images of cars have much more color differential when compared to an image of a non-car.
 
@@ -48,7 +48,7 @@ If you want to use all the features when training your classifier, it's importan
 
 ![](Figures/Step3d.PNG)
 
-###4. Train a classifier
+### 4. Train a classifier
 
 To train my SVM classifier, I used the `extract_features()` function to extract all of the features from the car and non-car datasets prepared in step 2. I extracted the features using the following parameters:
 ```
@@ -76,7 +76,7 @@ For these 10 labels:  [ 0.  1.  0.  0.  0.  0.  1.  1.  1.  0.]
 0.02 Seconds to predict 10 labels with SVC
 ```
 
-###5. Apply classifier to predict vehicle detection in test images
+### 5. Apply classifier to predict vehicle detection in test images
 
 In order to apply the classifier to predict vehicle detection in the test images, you must define your slide windows and at what scale. because we don't want to predict cars in the sky, we can immediately focus our efforts to predict cars from the horizon (about middle of the image) to the hood of the car. When setting my y_start_stop variable, I took into account the scale at which I was running the slide window. As the scale gets smaller, the y_start_stop window will get narrower. The reason for this is the fact that cars will appear smaller as they get closer to the horizon. 
 
@@ -92,11 +92,11 @@ In efforts to save on computing time and reduce false positives, I restricted my
 
 ![](Figures/Step5b.PNG)
 
-###6. Run classifier pipeline on project video
+### 6. Run classifier pipeline on project video
 
 Running the detection process on the video is similar to the process described above with a couple of additions. In my `pipeline()` function, I used global variables to grab the previous frame's heatmap as well as setting the previous variable, `set_prev`, equal to 0/1 (False/True). In the first frame of the video, the pipeline runs the process exactly like in step 5. However, from the second frame to the end, it uses the previous frame's heatmap multiplied by the smoothing factor and adds it to the current heatmap multiplied by (1 - the smoothing factor) (i.e. `heatmap * (1 - smoothing_factor) + heatmap_prev * smoothing_factor`). This will help with smoothing the vehicle tracking from frame to frame. After the heatmaps have been proportionally added, it goes through another threshold application to remove any other potential false positives.
 
-###Discussion
+### Discussion
 
 This implementation works for this project fairly well, but there are several things I'd like to improve upon in future implementations. I had trouble getting a final product that I'd be confortable submitting. First and foremost, I didn't want any false positive directly in front of the car. To me, that is the most dangerous type of false positive that could occur. In getting the false positives to a suitable level, I suffered on some of the vehicle tracking. This is shown toward the end of the video when the algorithm loses track of the black car it gets further away. That would be something I'd like to improve in the future. It's very possible that could be fixed via other future implementations.
 
